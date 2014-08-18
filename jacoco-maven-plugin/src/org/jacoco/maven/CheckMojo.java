@@ -124,6 +124,13 @@ public class CheckMojo extends AbstractJacocoMojo implements IViolationsOutput {
 	private boolean haltOnFailure;
 
 	/**
+	 * Flag used to suppress errors in case of duplicate class names.
+	 * 
+	 * @parameter property="jacoco.forgiving" default-value="false"
+	 */
+	private boolean forgiving;
+
+	/**
 	 * File with execution data.
 	 * 
 	 * @parameter default-value="${project.build.directory}/jacoco.exec"
@@ -193,7 +200,9 @@ public class CheckMojo extends AbstractJacocoMojo implements IViolationsOutput {
 				fileFilter, getLog());
 		try {
 			final ExecutionDataStore executionData = loadExecutionData();
-			return creator.createBundle(executionData);
+			final File classesDir = new File(getProject().getBuild()
+					.getOutputDirectory());
+			return creator.createBundle(executionData, classesDir, forgiving);
 		} catch (final IOException e) {
 			throw new MojoExecutionException(
 					"Error while reading code coverage: " + e.getMessage(), e);
