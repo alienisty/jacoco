@@ -59,16 +59,21 @@ public final class BundleCreator {
 	 * 
 	 * @param executionDataStore
 	 *            the execution data.
+	 * @param classesDir
+	 *            the root directory containing the classes to use
+	 * @param forgiving
+	 *            if <code>true</code> warn if duplicate classes are found,
+	 *            otherwise throw
 	 * @return the coverage data.
 	 * @throws IOException
 	 *             if class files can't be read
 	 */
 	public IBundleCoverage createBundle(
-			final ExecutionDataStore executionDataStore) throws IOException {
-		final CoverageBuilder builder = new CoverageBuilder();
+			final ExecutionDataStore executionDataStore,
+			final File classesDir,
+			final boolean forgiving) throws IOException {
+		final CoverageBuilder builder = new CoverageBuilder(forgiving);
 		final Analyzer analyzer = new Analyzer(executionDataStore, builder);
-		final File classesDir = new File(this.project.getBuild()
-				.getOutputDirectory());
 
 		@SuppressWarnings("unchecked")
 		final List<File> filesToAnalyze = FileUtils.getFiles(classesDir,
@@ -80,13 +85,15 @@ public final class BundleCreator {
 
 		final IBundleCoverage bundle = builder
 				.getBundle(this.project.getName());
-		logBundleInfo(bundle, builder.getNoMatchClasses());
+		logBundleInfo(bundle, builder.getNoMatchClasses(),
+				builder.getWarnings());
 
 		return bundle;
 	}
 
 	private void logBundleInfo(final IBundleCoverage bundle,
-			final Collection<IClassCoverage> nomatch) {
+			final Collection<IClassCoverage> nomatch,
+			final Collection<String> warnings) {
 		log.info(format("Analyzed bundle '%s' with %s classes",
 				bundle.getName(),
 				Integer.valueOf(bundle.getClassCounter().getTotalCount())));
@@ -100,6 +107,12 @@ public final class BundleCreator {
 						c.getName()));
 			}
 		}
+		if (!warnings.isEmpty()) {
+			for (final String warning : warnings) {
+				log.warn(warning);
+			}
+		}
+
 	}
 
 }

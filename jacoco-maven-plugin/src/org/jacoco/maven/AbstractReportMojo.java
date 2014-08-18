@@ -56,8 +56,7 @@ public abstract class AbstractReportMojo extends AbstractMavenReport {
 	/**
 	 * Encoding of the source files.
 	 * 
-	 * @parameter property="project.build.sourceEncoding"
-	 *            default-value="UTF-8"
+	 * @parameter property="project.build.sourceEncoding" default-value="UTF-8"
 	 */
 	String sourceEncoding;
 	/**
@@ -74,12 +73,14 @@ public abstract class AbstractReportMojo extends AbstractMavenReport {
 	 * @parameter
 	 */
 	List<String> excludes;
+
 	/**
 	 * Flag used to suppress execution.
 	 * 
 	 * @parameter property="jacoco.skip" default-value="false"
 	 */
 	boolean skip;
+
 	/**
 	 * Maven project.
 	 * 
@@ -154,12 +155,11 @@ public abstract class AbstractReportMojo extends AbstractMavenReport {
 							+ getDataFile());
 			return false;
 		}
-		final File classesDirectory = new File(getProject().getBuild()
-				.getOutputDirectory());
-		if (!classesDirectory.exists()) {
+		final File classesRoot = getClassesRoot();
+		if (!classesRoot.exists()) {
 			getLog().info(
 					"Skipping JaCoCo execution due to missing classes directory:"
-							+ classesDirectory);
+							+ classesRoot);
 			return false;
 		}
 		return true;
@@ -216,11 +216,16 @@ public abstract class AbstractReportMojo extends AbstractMavenReport {
 				this.getExcludes());
 		final BundleCreator creator = new BundleCreator(this.getProject(),
 				fileFilter, getLog());
-		final IBundleCoverage bundle = creator.createBundle(executionDataStore);
+		final IBundleCoverage bundle = creator.createBundle(executionDataStore,
+				getClassesRoot(), isForgiving());
 		final SourceFileCollection locator = new SourceFileCollection(
 				getCompileSourceRoots(), sourceEncoding);
 		checkForMissingDebugInformation(bundle);
 		visitor.visitBundle(bundle, locator);
+	}
+
+	boolean isForgiving() {
+		return false;
 	}
 
 	void checkForMissingDebugInformation(final ICoverageNode node) {
@@ -256,6 +261,10 @@ public abstract class AbstractReportMojo extends AbstractMavenReport {
 			file = new File(getProject().getBasedir(), path);
 		}
 		return file;
+	}
+
+	File getClassesRoot() {
+		return new File(getProject().getBuild().getOutputDirectory());
 	}
 
 	List<File> getCompileSourceRoots() {

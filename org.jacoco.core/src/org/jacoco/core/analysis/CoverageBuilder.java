@@ -40,13 +40,35 @@ public class CoverageBuilder implements ICoverageVisitor {
 
 	private final Map<String, ISourceFileCoverage> sourcefiles;
 
+	private final Collection<String> warnings;
+
+	private final boolean forgiving;
+
 	/**
 	 * Create a new builder.
 	 * 
 	 */
 	public CoverageBuilder() {
+		this(false);
+	}
+
+	/**
+	 * Create a new builder.
+	 * 
+	 * @param forgiving
+	 *            if <code>true</code> warnings are collected if duplicate
+	 *            classes are found, otherwise the builder will throw at the
+	 *            first duplicate.
+	 */
+	public CoverageBuilder(final boolean forgiving) {
 		this.classes = new HashMap<String, IClassCoverage>();
 		this.sourcefiles = new HashMap<String, ISourceFileCoverage>();
+		this.forgiving = forgiving;
+		if (forgiving) {
+			warnings = new ArrayList<String>();
+		} else {
+			warnings = Collections.emptyList();
+		}
 	}
 
 	/**
@@ -65,6 +87,16 @@ public class CoverageBuilder implements ICoverageVisitor {
 	 */
 	public Collection<ISourceFileCoverage> getSourceFiles() {
 		return Collections.unmodifiableCollection(sourcefiles.values());
+	}
+
+	/**
+	 * Returns all the warning messages collected when running in forgiving
+	 * mode.
+	 * 
+	 * @return the collected warning messages
+	 */
+	public Collection<String> getWarnings() {
+		return Collections.unmodifiableCollection(warnings);
 	}
 
 	/**
@@ -103,8 +135,16 @@ public class CoverageBuilder implements ICoverageVisitor {
 			final String name = coverage.getName();
 			final IClassCoverage dup = classes.put(name, coverage);
 			if (dup != null && dup.getId() != coverage.getId()) {
-				throw new IllegalStateException(
-						"Can't add different class with same name: " + name);
+				final String message = "Can't add different class with same name: "
+						+ name;
+				if (forgiving) {
+					// log
+					warnings.add(message);
+					classes.put(name, dup);
+					return;
+				} else {
+					throw new IllegalStateException(message);
+				}
 			}
 			final String source = coverage.getSourceFileName();
 			if (source != null) {
