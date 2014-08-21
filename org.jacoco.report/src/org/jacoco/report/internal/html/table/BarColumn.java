@@ -39,8 +39,6 @@ public class BarColumn implements IColumnRenderer {
 
 	private final NumberFormat integerFormat;
 
-	private int max;
-
 	private final Comparator<ITableItem> comparator;
 
 	/**
@@ -62,13 +60,6 @@ public class BarColumn implements IColumnRenderer {
 
 	public boolean init(final List<? extends ITableItem> items,
 			final ICoverageNode total) {
-		this.max = 0;
-		for (final ITableItem item : items) {
-			final int count = item.getNode().getCounter(entity).getTotalCount();
-			if (count > this.max) {
-				this.max = count;
-			}
-		}
 		return true;
 	}
 
@@ -83,17 +74,19 @@ public class BarColumn implements IColumnRenderer {
 	public void item(final HTMLElement td, final ITableItem item,
 			final Resources resources, final ReportOutputFolder base)
 			throws IOException {
-		if (max > 0) {
-			final ICounter counter = item.getNode().getCounter(entity);
-			final int missed = counter.getMissedCount();
-			bar(td, missed, Resources.REDBAR, resources, base);
+		final ICounter counter = item.getNode().getCounter(entity);
+		final int total = counter.getTotalCount();
+		if (total > 0) {
 			final int covered = counter.getCoveredCount();
-			bar(td, covered, Resources.GREENBAR, resources, base);
+			bar(td, covered, Resources.GREENBAR, resources, base, total);
+			final int missed = counter.getMissedCount();
+			bar(td, missed, Resources.REDBAR, resources, base, total);
 		}
 	}
 
 	private void bar(final HTMLElement td, final int count, final String image,
-			final Resources resources, final ReportOutputFolder base)
+			final Resources resources, final ReportOutputFolder base,
+			final int max)
 			throws IOException {
 		final int width = count * WIDTH / max;
 		if (width > 0) {
