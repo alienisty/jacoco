@@ -151,23 +151,23 @@ abstract class HTMLReportContext<S extends ILinkable> implements
 		t.add("Element", null, new LabelColumn(), false);
 		t.add("Missed Instructions", Styles.BAR, new BarColumn(
 				CounterEntity.INSTRUCTION,
-				locale), true);
+				locale), false);
 		t.add("Cov.", Styles.CTR2,
-				new PercentageColumn(CounterEntity.INSTRUCTION, locale), false);
+				new PercentageColumn(CounterEntity.INSTRUCTION, locale), true);
 		t.add("Missed Branches", Styles.BAR, new BarColumn(
 				CounterEntity.BRANCH, locale),
 				false);
 		t.add("Cov.", Styles.CTR2, new PercentageColumn(CounterEntity.BRANCH,
 				locale),
 				false);
-		addMissedTotalColumns(t, "Cxty", CounterEntity.COMPLEXITY);
+		addMissedTotalColumns(t, "CyCo", CounterEntity.COMPLEXITY);
 		addMissedTotalColumns(t, "Lines", CounterEntity.LINE);
 		addMissedTotalColumns(t, "Methods", CounterEntity.METHOD);
 		addMissedTotalColumns(t, "Classes", CounterEntity.CLASS);
 		return t;
 	}
 
-	private void addMissedTotalColumns(final Table table, final String label,
+	final void addMissedTotalColumns(final Table table, final String label,
 			final CounterEntity entity) {
 		table.add("Missed", Styles.CTR1,
 				CounterColumn.newMissed(entity, locale), false);
