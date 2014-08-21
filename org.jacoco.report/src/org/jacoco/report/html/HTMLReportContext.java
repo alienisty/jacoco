@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2009, 2014 Mountainminds GmbH & Co. KG and Contributors
+ * Copyright (c) 2009, 2015 Mountainminds GmbH & Co. KG and Contributors
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -151,23 +151,23 @@ abstract class HTMLReportContext<S extends ILinkable> implements
 		t.add("Element", null, new LabelColumn(), false);
 		t.add("Missed Instructions", Styles.BAR, new BarColumn(
 				CounterEntity.INSTRUCTION,
-				locale), true);
+				locale), false);
 		t.add("Cov.", Styles.CTR2,
-				new PercentageColumn(CounterEntity.INSTRUCTION, locale), false);
+				new PercentageColumn(CounterEntity.INSTRUCTION, locale), true);
 		t.add("Missed Branches", Styles.BAR, new BarColumn(
 				CounterEntity.BRANCH, locale),
 				false);
 		t.add("Cov.", Styles.CTR2, new PercentageColumn(CounterEntity.BRANCH,
 				locale),
 				false);
-		addMissedTotalColumns(t, "Cxty", CounterEntity.COMPLEXITY);
+		addMissedTotalColumns(t, "CyCo", CounterEntity.COMPLEXITY);
 		addMissedTotalColumns(t, "Lines", CounterEntity.LINE);
 		addMissedTotalColumns(t, "Methods", CounterEntity.METHOD);
 		addMissedTotalColumns(t, "Classes", CounterEntity.CLASS);
 		return t;
 	}
 
-	private void addMissedTotalColumns(final Table table, final String label,
+	final void addMissedTotalColumns(final Table table, final String label,
 			final CounterEntity entity) {
 		table.add("Missed", Styles.CTR1,
 				CounterColumn.newMissed(entity, locale), false);

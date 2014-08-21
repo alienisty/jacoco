@@ -82,6 +82,13 @@ public abstract class AbstractReportMojo extends AbstractMavenReport {
 	boolean skip;
 
 	/**
+	 * Flag used to suppress errors in case of duplicate class names.
+	 * 
+	 * @parameter property="jacoco.forgiving" default-value="false"
+	 */
+	boolean forgiving;
+
+	/**
 	 * Maven project.
 	 * 
 	 * @parameter property="project"
@@ -217,15 +224,11 @@ public abstract class AbstractReportMojo extends AbstractMavenReport {
 		final BundleCreator creator = new BundleCreator(this.getProject(),
 				fileFilter, getLog());
 		final IBundleCoverage bundle = creator.createBundle(executionDataStore,
-				getClassesRoot(), isForgiving());
+				getClassesRoot(), forgiving);
 		final SourceFileCollection locator = new SourceFileCollection(
 				getCompileSourceRoots(), sourceEncoding);
 		checkForMissingDebugInformation(bundle);
 		visitor.visitBundle(bundle, locator);
-	}
-
-	boolean isForgiving() {
-		return false;
 	}
 
 	void checkForMissingDebugInformation(final ICoverageNode node) {

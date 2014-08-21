@@ -100,20 +100,20 @@ public class BarColumnTest {
 		assertEquals("2",
 				support.findStr(doc, "count(/html/body/table/tr[1]/td/img)"));
 
-		// red bar
-		assertEquals(".resources/redbar.gif",
-				support.findStr(doc, "/html/body/table/tr[1]/td/img[1]/@src"));
-		assertEquals("15",
-				support.findStr(doc, "/html/body/table/tr[1]/td/img[1]/@alt"));
-		assertEquals("60",
-				support.findStr(doc, "/html/body/table/tr[1]/td/img[1]/@width"));
-
 		// green bar
 		assertEquals(".resources/greenbar.gif",
-				support.findStr(doc, "/html/body/table/tr[1]/td/img[2]/@src"));
+				support.findStr(doc, "/html/body/table/tr[1]/td/img[1]/@src"));
 		assertEquals("5",
+				support.findStr(doc, "/html/body/table/tr[1]/td/img[1]/@alt"));
+		assertEquals("30",
+				support.findStr(doc, "/html/body/table/tr[1]/td/img[1]/@width"));
+
+		// red bar
+		assertEquals(".resources/redbar.gif",
+				support.findStr(doc, "/html/body/table/tr[1]/td/img[2]/@src"));
+		assertEquals("15",
 				support.findStr(doc, "/html/body/table/tr[1]/td/img[2]/@alt"));
-		assertEquals("20",
+		assertEquals("90",
 				support.findStr(doc, "/html/body/table/tr[1]/td/img[2]/@width"));
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2009, 2014 Mountainminds GmbH & Co. KG and Contributors
+ * Copyright (c) 2009, 2015 Mountainminds GmbH & Co. KG and Contributors
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -52,13 +52,6 @@ public class SummaryMojo extends AbstractReportMojo {
 	 * @parameter default-value="${project.build.directory}/jacoco.exec"
 	 */
 	private File dataFile;
-
-	/**
-	 * Flag used to suppress errors in case of duplicate class names.
-	 * 
-	 * @parameter property="jacoco.forgiving" default-value="false"
-	 */
-	private boolean forgiving;
 
 	@Override
 	public boolean canGenerateReport() {
@@ -139,34 +132,7 @@ public class SummaryMojo extends AbstractReportMojo {
 	}
 
 	@Override
-	boolean isForgiving() {
-		return forgiving;
-	}
-
-	@Override
 	List<File> getCompileSourceRoots() {
 		return new ArrayList<File>(0);
 	}
-	/*
-	 * final List<File> result = super.getCompileSourceRoots();
-	 * 
-	 * @SuppressWarnings("unchecked") final List<String> modulesRelativePaths =
-	 * project.getModules(); final MavenXpp3Reader modelReader = new
-	 * MavenXpp3Reader(); for (final String moduleRelativePath :
-	 * modulesRelativePaths) { final File moduleBase = new
-	 * File(project.getBasedir(), moduleRelativePath); final File modulePom =
-	 * new File(moduleBase, "pom.xml"); try { final InputStream in = new
-	 * FileInputStream(modulePom); try { final Model model =
-	 * modelReader.read(in, false); final Build build = model.getBuild();
-	 * addSourceTo(result, build.getSourceDirectory()); addSourceTo(result,
-	 * build.getTestSourceDirectory()); } catch (final Exception e) {
-	 * getLog().warn("Unable to parse " + modulePom, e); } finally {
-	 * IOUtil.close(in); } } catch (final IOException e) {
-	 * getLog().warn("Unable to open " + modulePom, e); } } return result; }
-	 * 
-	 * private void addSourceTo(final List<File> result, final String source) {
-	 * if (source == null) { return; } final File sourceFile =
-	 * resolvePath(source); if (sourceFile.exists()) { result.add(sourceFile); }
-	 * }
-	 */
 }

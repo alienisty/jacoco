@@ -9,13 +9,14 @@
    Contributors:
       Evgeny Mandrikov - initial API and implementation
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.jacoco</groupId>
     <artifactId>org.jacoco.tests</artifactId>
-    <version>0.7.4.201502262128</version>
+    <version>0.7.4-IMO.1</version>
     <relativePath>../org.jacoco.tests</relativePath>
   </parent>
 
@@ -27,6 +28,18 @@
     <jacoco.includes>org.jacoco.core.*</jacoco.includes>
   </properties>
 
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -37,7 +50,7 @@
       <artifactId>junit</artifactId>
     </dependency>
   </dependencies>
-  
+
   <profiles>
     <profile>
       <id>no-java8-validation</id>
@@ -59,5 +72,5 @@
       </build>
     </profile>
   </profiles>
-  
+
 </project>
