@@ -68,6 +68,15 @@ public class Table {
 	}
 
 	/**
+	 * A read-only view of the table's columns
+	 * 
+	 * @return
+	 */
+	public List<Column> columns() {
+		return Collections.unmodifiableList(columns);
+	}
+
+	/**
 	 * Renders a table for the given icon
 	 * 
 	 * @param parent
@@ -96,7 +105,15 @@ public class Table {
 		body(table, sortedItems, resources, base);
 	}
 
-	private void header(final HTMLElement table,
+	/**
+	 * Renders the header of the table
+	 * 
+	 * @param table
+	 * @param items
+	 * @param total
+	 * @throws IOException
+	 */
+	protected void header(final HTMLElement table,
 			final List<? extends ITableItem> items, final ICoverageNode total)
 			throws IOException {
 		final HTMLElement tr = table.thead().tr();
@@ -105,7 +122,16 @@ public class Table {
 		}
 	}
 
-	private void footer(final HTMLElement table, final ICoverageNode total,
+	/**
+	 * Renders the footer of the table
+	 * 
+	 * @param table
+	 * @param total
+	 * @param resources
+	 * @param base
+	 * @throws IOException
+	 */
+	protected void footer(final HTMLElement table, final ICoverageNode total,
 			final Resources resources, final ReportOutputFolder base)
 			throws IOException {
 		final HTMLElement tr = table.tfoot().tr();
@@ -138,7 +164,10 @@ public class Table {
 		return items;
 	}
 
-	private static class Column {
+	/**
+	 * Represent a column of the table
+	 */
+	public static class Column {
 
 		private final char idprefix;
 		private final String header;
@@ -148,7 +177,7 @@ public class Table {
 
 		private boolean visible;
 
-		Column(final int idx, final String header, final String style,
+		private Column(final int idx, final String header, final String style,
 				final IColumnRenderer renderer, final boolean defaultSorting) {
 			this.idprefix = (char) ('a' + idx);
 			this.header = header;
@@ -171,7 +200,17 @@ public class Table {
 			}
 		}
 
-		void footer(final HTMLElement tr, final ICoverageNode total,
+		/**
+		 * Renders the column with the style that should be used for the footer
+		 * of the table
+		 * 
+		 * @param tr
+		 * @param total
+		 * @param resources
+		 * @param base
+		 * @throws IOException
+		 */
+		public void footer(final HTMLElement tr, final ICoverageNode total,
 				final Resources resources, final ReportOutputFolder base)
 				throws IOException {
 			if (visible) {

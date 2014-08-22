@@ -146,7 +146,7 @@ abstract class HTMLReportContext<S extends ILinkable> implements
 		return table;
 	}
 
-	private Table createTable() {
+	Table createTable() {
 		final Table t = new Table();
 		t.add("Element", null, new LabelColumn(), false);
 		t.add("Missed Instructions", Styles.BAR, new BarColumn(
