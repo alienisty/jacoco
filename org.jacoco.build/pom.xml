@@ -14,7 +14,7 @@
 
   <groupId>org.jacoco</groupId>
   <artifactId>org.jacoco.build</artifactId>
-  <version>0.7.4.201502262128</version>
+  <version>0.7.4-IMO.2</version>
   <packaging>pom</packaging>
 
   <name>JaCoCo</name>
@@ -111,15 +111,9 @@
   </issueManagement>
   <distributionManagement>
     <repository>
-      <id>sonatype-nexus-staging</id>
-      <name>Nexus Release Repository</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      <id>releases</id>
+      <url>http://nexus.wem-uat.local:8088/nexus/content/repositories</url>
     </repository>
-    <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <name>Sonatype Nexus Snapshots</name>
-      <url>${sonatypeOssDistMgmtSnapshotsUrl}</url>
-    </snapshotRepository>
   </distributionManagement>
 
   <properties>
